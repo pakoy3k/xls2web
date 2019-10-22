@@ -3,8 +3,12 @@ Extraer informacion de un archivo XLS para crear una pagina web con ese contenid
 
 *Requerimientos
 Necesita instalar:
+
 -pip install xlrd
+
 -pip install flask
 
+
 *Para ejecutarlo:
+
 /xls2web/flask run
