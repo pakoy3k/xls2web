@@ -1,0 +1,6 @@
+# the enviorment folder
+/venv
+# the cache preloader app
+/__pycache__
+# the app folder
+/app
