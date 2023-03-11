@@ -17,7 +17,7 @@ def find_column(id, page):
         if id_index is None:
             return []
         if id in sheet.col_values(id_index):
-            print("Columna Id encontrada en hoja\t", sheet)
+            print("Id encontrada en hoja\t", sheet)
             # print("-----------------------\n")
             return id_index
         # elif id_index.type
