@@ -7,48 +7,57 @@ import xlrd
 book = xlrd.open_workbook('pagina.xls')
 number_sheets = book.nsheets  # Numero de hojas que tiene el libro de excel
 
+'''
+method to return column id and return id_index
+'''
+
 
 def find_column(id, page):
     try:
         sheet = book.sheet_by_index(page)  # load 0 page
-        # vector.index("VALOR BUSCADO")
+        # busca el indice de la columna id
         id_index = sheet.row_values(0).index("id")
-        # print("ESTE ES EL ID INDEX: O SEA LA COLUMNA ID", id_index)
-        if id_index is None:
-            return []
+        # En caso de no estar la palabra id en la fila retorna una lista vacia.
+        # Busca que el id esté en los valores de la columna si no está retorna una
+        # lista vacía, si está retorna el valor de la columna donde se escuentra.
         if id in sheet.col_values(id_index):
             print("Id encontrada en hoja\t", sheet)
             # print("-----------------------\n")
-            return id_index
+            return id_index, True
+        else:
+            print("Id en columna: NO Encontrado")
+            return 0, False
         # elif id_index.type
     except ValueError as e:
         print('Error type: ', type(e))
         print("-----------------------\n")
-    finally:
-        return 0
 
 
 def load_XLRD(id_search):
-    # try:
-    # recorre la cantidad total de paginas
-    for index_page in range(number_sheets):
-        actual_page = book.sheet_by_index(index_page)  # load 0 page
-        # Busca que tenga en la fila 0 la palabra id para encontrar el valor de su columna
-        index_id = find_column(id_search, index_page)
-        if id_search in actual_page.col_values(index_id):
-            print("Id en columna: Encontrado")
-            row_index = actual_page.col_values(index_id).index(id_search)
-            print("Se en encuentra en la fila: ", row_index)
-            print("Y en la columna: ", index_id)
-            print("-----------------------\n")
-            # if
-            print(actual_page.row_values(row_index), "\n")
-        else:
-            print("Id en columna: NO Encontrado")
-            print("-----------------------\n")
-    # except TypeError:
-    #     print("Error: El valor no está en la pagina")
-    # index_page = index_page+1
+    try:
+        # recorre la cantidad total de paginas
+        for index_page in range(number_sheets):
+            actual_page = book.sheet_by_index(index_page)  # load 0 page
+            # Busca que tenga en la fila 0 la palabra id para encontrar el valor de su columna
+            index_id, find = find_column(id_search, index_page)
+            # print(type(find), find)
+            if find:
+                row_index = actual_page.col_values(index_id).index(id_search)
+                print("Se en encuentra en la fila: ", row_index)
+                print("Y en la columna: ", index_id)
+                print(actual_page.cell(row_index, index_id+1).value)
+                print("-----------------------\n")
+                if actual_page.cell(row_index, index_id+1).value is not bool:
+                    print("Busca en otra columna el valor...")
+                else:
+                    if actual_page.cell(row_index, index_id+1).value:
+                        print(actual_page.row_values(row_index), "\n")
+            else:
+                print("-----------------------\n")
+    except ValueError as e:
+        print('Error type: ', type(e))
+        #     print("Error: El valor no está en la pagina")
+        # index_page = index_page+1
 
 
 load_XLRD(3)
