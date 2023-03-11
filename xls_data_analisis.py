@@ -25,7 +25,7 @@ def find_column(id, page):
             # print("-----------------------\n")
             return id_index, True
         else:
-            print("Id en columna: NO Encontrado")
+            print("Id en columna: NO Encontrado", sheet)
             return 0, False
         # elif id_index.type
     except ValueError as e:
@@ -33,31 +33,46 @@ def find_column(id, page):
         print("-----------------------\n")
 
 
+def next_aproved(row, column, page):
+    actual_page = book.sheet_by_index(page)  # load 0 page
+    # Primero comprobar que el valor de la siguiente columna sea booleano.
+    if actual_page.ncols > 1:
+        its_boolean = str(actual_page.cell(row, column+1).value)
+        # revisar a atras y adelante
+        if its_boolean.lower() == "true":
+            return True
+        elif its_boolean.lower() == "false":
+            # print("Valor booleano:", its_boolean)
+            return False
+        else:
+            print("Busca el valor true o false en otra columna :)\n")
+            return "No booleano"
+    else:
+        print("No existe columnas por revisar")
+
+
 def load_XLRD(id_search):
     try:
         # recorre la cantidad total de paginas
-        for index_page in range(number_sheets):
-            actual_page = book.sheet_by_index(index_page)  # load 0 page
-            # Busca que tenga en la fila 0 la palabra id para encontrar el valor de su columna
+        for index_page in range(number_sheets):  # recorre cada pagina
+            actual_page = book.sheet_by_index(index_page)
+            # Busca la columna que contene el id
             index_id, find = find_column(id_search, index_page)
-            # print(type(find), find)
-            if find:
+            if find:  # Si se encontró el id prosigue
                 row_index = actual_page.col_values(index_id).index(id_search)
                 print("Se en encuentra en la fila: ", row_index)
                 print("Y en la columna: ", index_id)
-                print(actual_page.cell(row_index, index_id+1).value)
                 print("-----------------------\n")
-                if actual_page.cell(row_index, index_id+1).value is not bool:
-                    print("Busca en otra columna el valor...")
-                else:
-                    if actual_page.cell(row_index, index_id+1).value:
-                        print(actual_page.row_values(row_index), "\n")
+                # Si tiene su evaluador booleano prosigue
+                if next_aproved(row_index, index_id, index_page) == "No booleano":
+                    print("-----------------------\n")
+                elif next_aproved(row_index, index_id, index_page):
+                    print("DATOS DE: ", actual_page.row_values(row_index), "\n")
+                    print("-----------------------\n")
             else:
                 print("-----------------------\n")
     except ValueError as e:
         print('Error type: ', type(e))
-        #     print("Error: El valor no está en la pagina")
-        # index_page = index_page+1
 
 
 load_XLRD(3)
