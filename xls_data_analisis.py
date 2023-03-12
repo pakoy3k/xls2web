@@ -4,7 +4,9 @@ https://xlrd.readthedocs.io/en/latest/genindex.html
 '''
 import xlrd
 
-book = xlrd.open_workbook('pagina.xls')
+
+NameBook = 'pagina.xls'
+book = xlrd.open_workbook(NameBook)
 number_sheets = book.nsheets  # Numero de hojas que tiene el libro de excel
 
 '''
@@ -37,6 +39,8 @@ def next_aproved(row, column, page):
     actual_page = book.sheet_by_index(page)  # load 0 page
     # Primero comprobar que el valor de la siguiente columna sea booleano.
     if actual_page.ncols > 1:
+
+        # EL VALOR TRUE O FALSE los puede leer como strings
         its_boolean = str(actual_page.cell(row, column+1).value)
         # revisar a atras y adelante
         if its_boolean.lower() == "true":
@@ -60,8 +64,7 @@ def load_XLRD(id_search):
             index_id, find = find_column(id_search, index_page)
             if find:  # Si se encontró el id prosigue
                 row_index = actual_page.col_values(index_id).index(id_search)
-                print("Se en encuentra en la fila: ", row_index)
-                print("Y en la columna: ", index_id)
+                print("Celda y fila:", xlrd.formula.cellname(row_index, index_id))
                 print("-----------------------\n")
                 # Si tiene su evaluador booleano prosigue
                 if next_aproved(row_index, index_id, index_page) == "No booleano":
@@ -75,39 +78,4 @@ def load_XLRD(id_search):
         print('Error type: ', type(e))
 
 
-load_XLRD(3)
-
-
-def findd_page(id, page):
-    sheet = book.sheet_by_index(page)
-    num_rows = sheet.nrows
-    num_col = sheet.ncols
-    for col in range(num_col):
-        cell = sheet.cell(0, col)
-        if cell.value == "id":
-            print("")
-            for row in range(num_rows):
-                cell = sheet.cell(row, col)
-                rows_cell = sheet.row_values(row)
-                # print(rows_cell)
-                if id == rows_cell[0] and rows_cell[1] == 1:
-                    print(rows_cell[0], "-", rows_cell[2], "-", rows_cell[3])
-
-
-def x_function():
-    # Nombre de archivo que se desea abrir
-    print(number_sheets)
-    sheet = book.sheet_by_index(0)  # Primera hoja
-    id_temp = "3.0"  # id que se busca
-    index_info_id = 0  # indice de la columna donde se encuentra los id's
-    num_row = sheet.nrows  # Cuantas filas tiene la hoja 2
-    # num_col = sheet.ncols #Cuantas columnas cuenta la primera hoja
-    for row in range(num_row):
-        # Va recorriendo de fila en fila por la columna <index_info_id>
-        cell = sheet.cell(row, index_info_id)
-        next_cell = sheet.cell(row, index_info_id+1)
-        print("->"+id_temp + "\t" + str(cell.value),
-              next_cell.value == "true")  # Debug jajaja
-        # Si <id_temp> es igual al valor de la celda y la siguiente celda es igual a true
-        if id_temp == str(cell.value) and next_cell.value == "true":
-            print(sheet.row_values(row))
+load_XLRD(4)
