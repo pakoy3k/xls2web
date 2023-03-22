@@ -3,4 +3,4 @@
 # the cache preloader app
 /__pycache__
 # the app folder
-/app
+/app/__pycache__
