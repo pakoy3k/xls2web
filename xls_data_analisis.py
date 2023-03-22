@@ -14,6 +14,63 @@ method to return column id and return id_index
 '''
 
 
+# TODO: Error al agregar hoja de por medio.
+
+def num_hojas(file):
+    book = xlrd.open_workbook(file)
+    number_sheets = book.nsheets  # Numero de hojas que tiene el libro de excel
+    return number_sheets
+
+
+def filas_column(file, page):
+    book = xlrd.open_workbook(file)
+    return book.sheet_by_index(page).nrows, book.sheet_by_index(page).ncols
+
+
+def cell_info(file, page, rowX, colY):
+    book = xlrd.open_workbook(file)
+    return book.sheet_by_index(page).cell_value(rowX, colY)
+
+
+def col_info(file, page, col):
+    book = xlrd.open_workbook(file)
+    return book.sheet_by_index(page).col_values(col)
+
+
+def id_find_xls(file, page, id):
+    book = xlrd.open_workbook(file)
+    try:
+        sheet = book.sheet_by_index(page)  # load 0 page
+
+        id_index = sheet.row_values(0).index("id")
+        if id in sheet.col_values(id_index):
+            print("Id encontrada en hoja\t", sheet)
+            return id_index, True
+        else:
+            print("Id en columna: NO Encontrado", sheet)
+            return 0, False
+    except ValueError as e:
+        print('Error type: ', type(e))
+        print("-----------------------\n")
+
+
+def show_cols(file, page, cols):
+    book = xlrd.open_workbook(file)
+    sheet = book.sheet_by_index(page)
+    index_cols = [int(col) for col in cols.split(',')]
+    cols_value = []
+    for index in index_cols:
+        cols_value.append(sheet.col_values(index))
+    return cols_value
+    # for column in cols:
+
+
+def matriz_sheet(file, page):
+    book = xlrd.open_workbook(file)
+    sheet = book.sheet_by_index(page)
+    return [sheet.row_values(row) for row in range(sheet.nrows)]
+
+
 def find_column(id, page):
     try:
         sheet = book.sheet_by_index(page)  # load 0 page
@@ -78,4 +135,4 @@ def load_XLRD(id_search):
         print('Error type: ', type(e))
 
 
-load_XLRD(4)
+# load_XLRD(4)
