@@ -1,9 +1,10 @@
-# importación del modulo de flask y de xls_data_analisis como excel
+""" importación del modulo de flask y de xls_data_analisis como excel """
+
 import xls_data_analisis as excel
 
-from flask import (Flask, jsonify, render_template, request)
 from flask_jwt_extended import (
     create_access_token, get_jwt_identity, jwt_required, JWTManager)
+from flask import (Flask, jsonify, render_template, request)
 
 app = Flask(__name__)
 
@@ -77,13 +78,15 @@ def about():
 @app.route("/numero_de_hoja/<file>")
 def pages(file):
     """
-    Función que retorna el número de hojas que contiene un libro de excel en la ruta "/numero_de_hoja/<file>".
+    Función que retorna el número de hojas que contiene un 
+    libro de excel en la ruta "/numero_de_hoja/<file>".
 
     Parameters:
         file (str): Nombre del archivo de excel.
 
     Returns:
-        jsonify({"Hojas en el libro: ": excel.num_hojas(file)}): Retorna un objeto json con el número de hojas que contiene el libro de excel.
+        jsonify({"Hojas en el libro: ": excel.num_hojas(file)}): Retorna un objeto json con el 
+        número de hojas que contiene el libro de excel.
     """
     return jsonify({"Hojas en el libro: ": excel.num_hojas(file)})
 
@@ -91,14 +94,16 @@ def pages(file):
 @app.route("/filas_columnas/<file>/<int:page>")
 def cols_rows(file, page):
     """
-    Función que retorna el número de filas y columnas que tiene una hoja de un libro de excel en la ruta "/filas_columnas/<file>/<int:page>".
+    Función que retorna el número de filas y columnas que tiene una hoja 
+    de un libro de excel en la ruta "/filas_columnas/<file>/<int:page>".
 
     Parameters:
         file (str): Nombre del archivo de excel.
         page (int): Número de página (hoja) del libro de excel.
 
     Returns:
-        jsonify({"Filas: ": rows, "Columnas": cols}): Retorna un objeto json con el número de filas y columnas que tiene la hoja del libro de excel.
+        jsonify({"Filas: ": rows, "Columnas": cols}): Retorna un objeto json con el 
+        número de filas y columnas que tiene la hoja del libro de excel.
     """
     rows, cols = excel.filas_column(file, page)
     return jsonify({"Filas: ": rows, "Columnas": cols})
@@ -141,7 +146,7 @@ def col_info(file, page, col):
 
 
 @app.route("/findId/<file>/<int:page>/<int:id>")
-def id_find(file, page, id):
+def id_find(file, page, id_find):
     """
     Encuentra una fila en una hoja de Excel específica con un ID específico.
 
@@ -149,12 +154,12 @@ def id_find(file, page, id):
     :type file: str.
     :param page: Número de página en el libro de Excel.
     :type page: int.
-    :param id: Valor del ID a buscar.
-    :type id: int.
+    :param id_find: Valor del ID a buscar.
+    :type id_find: int.
     :return: Información de la fila con el ID.
     :rtype: dict.
     """
-    return jsonify({"Fund: ": excel.id_find_xls(file, page, id)})
+    return jsonify({"Fund: ": excel.id_find_xls(file, page, id_find)})
 
 
 @app.route("/valuesCols/<file>/<int:page>/<cols>")
