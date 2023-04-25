@@ -1,10 +1,37 @@
 # importanción del modulo de flask la clase flask
 import xls_data_analisis as excel
 
-from flask import Flask, jsonify
-
+from flask import (Flask, jsonify, render_template, request)
+from flask_jwt_extended import (create_access_token , get_jwt_identity, jwt_required, JWTManager)
 
 app = Flask(__name__)
+
+app.config["JWT_SECRET_KEY"] = "secret-malevical" 
+jwt = JWTManager(app)
+
+@app.route("/login", methods = ["POST"])
+def login():
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    if username != "test" or password != "test":
+        return jsonify({"msg": "Bad usename or password"}), 401
+    acces_token = create_access_token(identity=username)
+    return jsonify(acces_token = acces_token)
+
+@app.route("/protected", methods=["GET"])
+@jwt_required() # se
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as = current_user), 200
+
+@app.route("/")
+def home():
+    return render_template('index.html')
+
+
+@app.route("/about")
+def about():
+    return "que onda man como estás"
 
 
 @app.route("/numero_de_hoja/<file>")

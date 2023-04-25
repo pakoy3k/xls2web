@@ -1,0 +1,9 @@
+.container {
+    width: fit-content;
+    text-align: center;
+    padding: 1rem;
+    background-color: beige;
+    color: black;
+    border-radius: 35px;
+
+}
