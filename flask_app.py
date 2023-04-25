@@ -1,10 +1,10 @@
 """ importación del modulo de flask y de xls_data_analisis como excel """
 
-import xls_data_analisis as excel
 
 from flask_jwt_extended import (
     create_access_token, get_jwt_identity, jwt_required, JWTManager)
 from flask import (Flask, jsonify, render_template, request)
+import xls_data_analisis as excel
 
 app = Flask(__name__)
 
